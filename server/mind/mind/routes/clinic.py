@@ -30,7 +30,7 @@ def get_clinics():
     return jsonify(clinic=payload)
 
 
-@app.route('/clinic/address/<address>')
+@app.route('/clinic/address/<address>', methods=['GET'])
 def get_clinics_by_address(address):
     cursor = conn.cursor()
     address = '%' + address + '%'
@@ -57,7 +57,7 @@ def get_clinics_by_address(address):
 
 
 
-@app.route('/clinic/name/<clinic_name>')
+@app.route('/clinic/name/<clinic_name>', methods=['GET'])
 def get_clinics_by_name(clinic_name):
     cursor = conn.cursor()
     clinic_name = '%' + clinic_name + '%'
@@ -83,7 +83,7 @@ def get_clinics_by_name(clinic_name):
     return jsonify(clinic=payload)
 
 
-@app.route('/clinic/type/<type>')
+@app.route('/clinic/type/<type>', methods=['GET'])
 def get_clinics_by_type(type):
     cursor = conn.cursor()
     type = '%' + type + '%'
