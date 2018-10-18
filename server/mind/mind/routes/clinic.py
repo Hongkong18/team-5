@@ -87,7 +87,7 @@ def get_clinics_by_name(clinic_name):
 def get_clinics_by_type(type):
     cursor = conn.cursor()
     type = '%' + type + '%'
-    cursor.executemany("SELECT * from clinictype_tbl where type_en like %s or type_tc like %s or type_sc like %s", (type, type, type))
+    cursor.executemany("SELECT * from clinictype_tbl where type_en like %s ", type)
     result = cursor.fetchall()
     search = []
     for r in result:
@@ -139,16 +139,16 @@ def get_clinic_by_id(id):
     return jsonify(clinic=payload)
 
 
-# @app.route('/clinic/add', methods=['POST'])
-# def add_clinics():
-#     data = request.get_json()['clinics']
-#     cursor = conn.cursor()
-# 
-#     for d in data:
-#         sql = "INSERT INTO clinic_tbl (clinic_name, address, open_time, close_time, contact_no, description, latitude, longitude, clinic_count) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-#         cursor.executemany(sql, (d['clinic_name'], d['address'], d['open_time'], d['close_time'], d['contact_no'], d['description'], d['latitude'], d['longitude'], 0,))
-#
-#     return jsonify(message='success')
+@app.route('/clinic/add', methods=['POST'])
+def add_clinics():
+    data = request.get_json()['clinics']
+    cursor = conn.cursor()
+
+    for d in data:
+        sql = "INSERT INTO clinic_tbl (clinic_name, address, open_time, close_time, contact_no, description, latitude, longitude, clinic_count) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        cursor.executemany(sql, (d['clinic_name'], d['address'], d['open_time'], d['close_time'], d['contact_no'], d['description'], d['latitude'], d['longitude'], 0,))
+
+    return jsonify(message='success')
 
 
 @app.route('/clinic/delete/<id>', methods=['GET'])
