@@ -33,7 +33,7 @@ def get_clinics():
 @app.route('/clinic/address/<address>')
 def get_clinics_by_address(address):
     cursor = conn.cursor()
-    cursor.execute('SELECT * from clinic_tbl where address like %s', address)
+    cursor.execute("SELECT * from clinic_tbl where address like '%%%s%%'", address)
     result = cursor.fetchall()
     print(result)
     payload = []
@@ -59,7 +59,7 @@ def get_clinics_by_address(address):
 @app.route('/clinic/name/<clinic_name>')
 def get_clinics_by_name(clinic_name):
     cursor = conn.cursor()
-    cursor.execute('SELECT * from clinic_tbl where clinic_name like %s', clinic_name)
+    cursor.execute("SELECT * from clinic_tbl where clinic_name like '%%%s%%'", clinic_name)
     result = cursor.fetchall()
     print(result)
     payload = []
@@ -84,13 +84,13 @@ def get_clinics_by_name(clinic_name):
 @app.route('/clinic/type/<type>')
 def get_clinics_by_type(type):
     cursor = conn.cursor()
-    cursor.executemany('SELECT * from clinictype_tbl where type_en like %s', type)
+    cursor.executemany("SELECT * from clinictype_tbl where type_en like '%%%s%%'", type)
     result = cursor.fetchall()
     search = []
     for r in result:
         search.append(str(r[0]))
 
-    cursor.executemany('SELECT * from clinic_tbl where clinic_id in %s', search)
+    cursor.executemany("SELECT * from clinic_tbl where clinic_id in '%%%s%%'", search)
     result = cursor.fetchall()
     print(result)
     payload = []
