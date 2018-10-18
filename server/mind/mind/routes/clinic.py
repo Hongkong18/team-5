@@ -87,7 +87,7 @@ def get_clinics_by_name(clinic_name):
 def get_clinics_by_type(type):
     cursor = conn.cursor()
     type = '%' + type + '%'
-    cursor.executemany("SELECT * from clinictype_tbl where type_en like %s or type_tc like %s or type_sc like %s", type)
+    cursor.executemany("SELECT * from clinictype_tbl where type_en like %s or type_tc like %s or type_sc like %s", type, type, type)
     result = cursor.fetchall()
     search = []
     for r in result:
