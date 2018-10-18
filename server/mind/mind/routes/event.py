@@ -13,17 +13,11 @@ def get_events():
     payload = []
     for r in result:
         payload.append({
-                'clinic_id': r[0],
-                'clinic_name': r[1],
-                'address': r[2],
-                'contact_no': str(r[3]),
-                'description': r[4],
-                'latitude': float(r[5]),
-                'longitude': float(r[6]),
-                'clinic_count': r[7],
-                'open_time': str(r[8]),
-                'close_time': str(r[9]),
-                'photo_url': r[10]
+                'event_id': r[0],
+                'event_name': r[1],
+                'event_desc': r[2],
+                'event_url': r[3],
+                'event_photo_url': r[4],
             })
 
     return jsonify(event=payload)
