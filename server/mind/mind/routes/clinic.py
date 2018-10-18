@@ -33,7 +33,7 @@ def get_clinics():
 @app.route('/clinic/address/<address>')
 def get_clinics_by_address(address):
     cursor = conn.cursor()
-    cursor.execute("SELECT * from clinic_tbl where location like %s", (address,))
+    cursor.execute("SELECT * from clinic_tbl where address like %s", (address,))
     result = cursor.fetchall()
     print(result)
     payload = []
@@ -90,6 +90,7 @@ def get_clinics_by_type(type):
     for r in result:
         search.append(str(r[0]))
 
+    print(search)
     cursor.executemany("SELECT * from clinic_tbl where clinic_id in " + str(tuple(search)))
     result = cursor.fetchall()
     print(result)
