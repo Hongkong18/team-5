@@ -1,22 +1,6 @@
 from flask import jsonify, request
 from mind import app
-import json
-
 from mind import conn
-
-from decimal import Decimal
-
-class fakefloat(float):
-    def __init__(self, value):
-        self._value = value
-    def __repr__(self):
-        return str(self._value)
-
-def defaultencode(o):
-    if isinstance(o, Decimal):
-        # Subclass float with custom repr?
-        return fakefloat(o)
-    raise TypeError(repr(o) + " is not JSON serializable")
 
 
 @app.route('/clinic', methods=['GET'])
@@ -43,16 +27,113 @@ def get_clinics():
                 'photo_url': r[10]
             })
 
-    
     return jsonify(clinic=payload)
 
-@app.route('/clinic/<id>', methods=['GET'])
-def get_clinic(id):
+
+@app.route('/clinic/address/<address>')
+def get_clinics_by_address(address):
+    cursor = conn.cursor()
+    cursor.execute("SELECT * from clinic_tbl where location like %s", (address,))
+    result = cursor.fetchall()
+    print(result)
+    payload = []
+    for r in result:
+        payload.append({
+                'clinic_id': r[0],
+                'clinic_name': r[1],
+                'address': r[2],
+                'contact_no': str(r[3]),
+                'description': r[4],
+                'latitude': float(r[5]),
+                'longitude': float(r[6]),
+                'clinic_count': r[7],
+                'open_time': str(r[8]),
+                'close_time': str(r[9]),
+                'photo_url': r[10]
+            })
+
+    return jsonify(clinic=payload)
+
+
+
+@app.route('/clinic/name/<clinic_name>')
+def get_clinics_by_name(clinic_name):
+    cursor = conn.cursor()
+    cursor.execute("SELECT * from clinic_tbl where clinic_name like %s", (clinic_name,))
+    result = cursor.fetchall()
+    print(result)
+    payload = []
+    for r in result:
+        payload.append({
+                'clinic_id': r[0],
+                'clinic_name': r[1],
+                'address': r[2],
+                'contact_no': str(r[3]),
+                'description': r[4],
+                'latitude': float(r[5]),
+                'longitude': float(r[6]),
+                'clinic_count': r[7],
+                'open_time': str(r[8]),
+                'close_time': str(r[9]),
+                'photo_url': r[10]
+            })
+
+    return jsonify(clinic=payload)
+
+
+@app.route('/clinic/type/<type>')
+def get_clinics_by_type(type):
+    cursor = conn.cursor()
+    cursor.executemany("SELECT * from clinictype_tbl where type_en like %s", (type,))
+    result = cursor.fetchall()
+    search = []
+    for r in result:
+        search.append(str(r[0]))
+
+    cursor.executemany("SELECT * from clinic_tbl where clinic_id in " + str(tuple(search)))
+    result = cursor.fetchall()
+    print(result)
+    payload = []
+    for r in result:
+        payload.append({
+                'clinic_id': r[0],
+                'clinic_name': r[1],
+                'address': r[2],
+                'contact_no': str(r[3]),
+                'description': r[4],
+                'latitude': float(r[5]),
+                'longitude': float(r[6]),
+                'clinic_count': r[7],
+                'open_time': str(r[8]),
+                'close_time': str(r[9]),
+                'photo_url': r[10]
+            })
+
+    return jsonify(clinic=payload)
+
+
+@app.route('/clinic/id/<id>', methods=['GET'])
+def get_clinic_by_id(id):
     cursor = conn.cursor()
     cursor.execute("SELECT * from clinic_tbl where id=%s", (id,))
-    clinic = cursor.fetchone()
+    r = cursor.fetchone()
+    print(r)
 
-    return jsonify(clinic=clinic)
+    payload = [{
+        'clinic_id': r[0],
+        'clinic_name': r[1],
+        'address': r[2],
+        'contact_no': str(r[3]),
+        'description': r[4],
+        'latitude': float(r[5]),
+        'longitude': float(r[6]),
+        'clinic_count': r[7],
+        'open_time': str(r[8]),
+        'close_time': str(r[9]),
+        'photo_url': r[10]
+    }]
+
+    return jsonify(clinic=payload)
 
 
 @app.route('/clinic/add', methods=['POST'])
