@@ -19,8 +19,8 @@ def get_clinics():
                 'address': r[2],
                 'contact_no': str(r[3]),
                 'description': r[4],
-                'latitude': float(r[5]),
-                'longitude': float(r[6]),
+                'latitude': r[5],
+                'longitude': r[6],
                 'clinic_count': r[7],
                 'open_time': str(r[8]),
                 'close_time': str(r[9]),
@@ -45,8 +45,8 @@ def get_clinics_by_address(address):
                 'address': r[2],
                 'contact_no': str(r[3]),
                 'description': r[4],
-                'latitude': float(r[5]),
-                'longitude': float(r[6]),
+                'latitude': r[5],
+                'longitude': r[6],
                 'clinic_count': r[7],
                 'open_time': str(r[8]),
                 'close_time': str(r[9]),
@@ -104,8 +104,8 @@ def get_clinics_by_type(type):
                 'address': r[2],
                 'contact_no': str(r[3]),
                 'description': r[4],
-                'latitude': float(r[5]),
-                'longitude': float(r[6]),
+                'latitude': r[5],
+                'longitude': r[6],
                 'clinic_count': r[7],
                 'open_time': str(r[8]),
                 'close_time': str(r[9]),
@@ -128,8 +128,8 @@ def get_clinic_by_id(id):
         'address': r[2],
         'contact_no': str(r[3]),
         'description': r[4],
-        'latitude': float(r[5]),
-        'longitude': float(r[6]),
+        'latitude': r[5],
+        'longitude': r[6],
         'clinic_count': r[7],
         'open_time': str(r[8]),
         'close_time': str(r[9]),
@@ -139,22 +139,22 @@ def get_clinic_by_id(id):
     return jsonify(clinic=payload)
 
 
-@app.route('/clinic/add', methods=['POST'])
-def add_clinics():
-    data = request.get_json()['clinics']
-    cursor = conn.cursor()
+# @app.route('/clinic/add', methods=['POST'])
+# def add_clinics():
+#     data = request.get_json()['clinics']
+#     cursor = conn.cursor()
+#
+#     for d in data:
+#         sql = "INSERT INTO clinic_tbl (clinic_name, address, open_time, close_time, contact_no, description, latitude, longitude, clinic_count) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+#         cursor.executemany(sql, (d['clinic_name'], d['address'], d['open_time'], d['close_time'], d['contact_no'], d['description'], d['latitude'], d['longitude'], 0,))
+#
+#     return jsonify(message='success')
 
-    for d in data:
-        sql = "INSERT INTO clinic_tbl (clinic_name, address, open_time, close_time, contact_no, description, latitude, longitude, clinic_count) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-        cursor.executemany(sql, (d['clinic_name'], d['address'], d['open_time'], d['close_time'], d['contact_no'], d['description'], d['latitude'], d['longitude'], 0,))
 
-    return jsonify(message='success')
-
-
-@app.route('/clinic/delete/<id>', methods=['GET'])
-def delete_clinic(id):
-    sql = "DELETE FROM clinic_tbl where clinic_id=%s"
-    cursor = conn.cursor()
-    cursor.execute(sql, (id,))
-
-    return jsonify(message='success')
+# @app.route('/clinic/delete/<id>', methods=['GET'])
+# def delete_clinic(id):
+#     sql = "DELETE FROM clinic_tbl where clinic_id=%s"
+#     cursor = conn.cursor()
+#     cursor.execute(sql, (id,))
+#
+#     return jsonify(message='success')
