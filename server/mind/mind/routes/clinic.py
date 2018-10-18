@@ -33,7 +33,8 @@ def get_clinics():
 @app.route('/clinic/address/<address>')
 def get_clinics_by_address(address):
     cursor = conn.cursor()
-    cursor.execute("SELECT * from clinic_tbl where address like '%%s%'", address)
+    address = '%' + address + '%'
+    cursor.execute("SELECT * from clinic_tbl where address like %s", address)
     result = cursor.fetchall()
     print(result)
     payload = []
