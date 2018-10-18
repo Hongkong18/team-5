@@ -1,7 +1,22 @@
 from flask import jsonify, request
 from mind import app
+import json
 
 from mind import conn
+
+from decimal import Decimal
+
+class fakefloat(float):
+    def __init__(self, value):
+        self._value = value
+    def __repr__(self):
+        return str(self._value)
+
+def defaultencode(o):
+    if isinstance(o, Decimal):
+        # Subclass float with custom repr?
+        return fakefloat(o)
+    raise TypeError(repr(o) + " is not JSON serializable")
 
 
 @app.route('/clinic', methods=['GET'])
@@ -10,10 +25,26 @@ def get_clinics():
 
     cursor = conn.cursor()
     cursor.execute("SELECT * from clinic_tbl")
-    clinics = cursor.fetchall()
+    result = cursor.fetchall()
+    print(result)
+    payload = []
+    for r in result:
+        payload.append({
+                'clinic_id': r[0],
+                'clinic_name': r[1],
+                'address': r[2],
+                'contact_no': str(r[3]),
+                'description': r[4],
+                'latitude': float(r[5]),
+                'longitude': float(r[6]),
+                'clinic_count': r[7],
+                'open_time': str(r[8]),
+                'close_time': str(r[9]),
+                'photo_url': r[10]
+            })
 
-    return jsonify(clinics=clinics)
-
+    
+    return jsonify(clinic=payload)
 
 @app.route('/clinic/<id>', methods=['GET'])
 def get_clinic(id):
