@@ -1,8 +1,8 @@
-from flask import Flask
 from flaskext.mysql import MySQL
+from mind import app
+
 import config
 
-app = Flask(__name__)
 mysql = MySQL()
 app.config['MYSQL_DATABASE_USER'] = config.USER
 app.config['MYSQL_DATABASE_PASSWORD'] = config.PASSWORD

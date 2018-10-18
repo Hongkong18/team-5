@@ -9,7 +9,7 @@ def get_clinics():
     # data = request.get_json()
 
     cursor = conn.cursor()
-    cursor.execute("SELECT * from clinic")
+    cursor.execute("SELECT * from clinic_tbl")
     clinics = cursor.fetchall()
 
     return jsonify(clinics=clinics)
@@ -18,7 +18,7 @@ def get_clinics():
 @app.route('/clinic/<id>', methods=['GET'])
 def get_clinic(id):
     cursor = conn.cursor()
-    cursor.execute("SELECT * from Clinic where id=%s", (id,))
+    cursor.execute("SELECT * from clinic_tbl where id=%s", (id,))
     clinic = cursor.fetchone()
 
     return jsonify(clinic=clinic)
@@ -30,7 +30,7 @@ def add_clinics():
     cursor = conn.cursor()
 
     for d in data:
-        sql = "INSERT INTO Clinic (clinic_name, address, open_time, close_time, contact_no, description, latitude, longitude, clinic_count) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+        sql = "INSERT INTO clinic_tbl (clinic_name, address, open_time, close_time, contact_no, description, latitude, longitude, clinic_count) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
         cursor.executemany(sql, (d['clinic_name'], d['address'], d['open_time'], d['close_time'], d['contact_no'], d['description'], d['latitude'], d['longitude'], 0,))
 
     return jsonify(message='success')
@@ -38,7 +38,7 @@ def add_clinics():
 
 @app.route('/clinic/delete/<id>', methods=['GET'])
 def delete_clinic(id):
-    sql = "DELETE FROM clinic where id=%s"
+    sql = "DELETE FROM clinic_tbl where id=%s"
     cursor = conn.cursor()
     cursor.execute(sql, (id,))
 
